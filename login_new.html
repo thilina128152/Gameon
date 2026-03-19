@@ -67,20 +67,32 @@
     });
 
     // Feedback form submit
-    const form = document.getElementById('feedbackForm');
+    window.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('feedbackForm');
+      if (!form) return;
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const data = Object.fromEntries(new FormData(form));
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = Object.fromEntries(new FormData(form));
 
-      const response = await fetch('https://gameon-feedback-api-e2ghdrewf9hpcnga.eastasia-01.azurewebsites.net/api/submitfeedbackgameon?code=GtM8EId2N78NDwHj25_Rf0dYP_WIl0aqRJ53zunVcr6IAzFu4PBftw==', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        try {
+          const response = await fetch('https://gameon-feedback-api-e2ghdrewf9hpcnga.eastasia-01.azurewebsites.net/api/submitfeedbackgameon?code=GtM8EId2N78NDwHj25_Rf0dYP_WIl0aqRJ53zunVcr6IAzFu4PBftw==', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          if(response.ok){
+            alert('Feedback submitted!');
+            form.reset(); // Clears the form after submission
+          } else {
+            alert('Error sending feedback');
+          }
+        } catch (err) {
+          console.error(err);
+          alert('Error sending feedback');
+        }
       });
-
-      if(response.ok) alert('Feedback submitted!');
-      else alert('Error sending feedback');
     });
   </script>
 
